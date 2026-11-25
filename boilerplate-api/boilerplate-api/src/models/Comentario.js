@@ -1,29 +1,30 @@
 import mongoose from "mongoose";
 
-const schemaComentario = new  mongoose.Schema(
+const comentarioSchema = new  mongoose.Schema(
     {
         bebidaId:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Bebida",
-            required:true
+            required:[true,"A bebida é obrigatoria."],
         },
         degustadorId:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Degustador",
-            required:true
+            required:[true,"O degustador é obrigatorio."]
         },
         nota:{
             type:Number,
-            required:true,
-            min:0,
-            max:10
+            required:[true,"A nota é obrigatorio."],
+            min:[0,"A nota minima é 0"],
+            max:[10,"a nota maxima é 10"],
         },
         texto:{
             type:String,
-            required:true,
+            required:[true,"O texto é obrigatorio."],
             trim:true
         }
     },
     {timestamps : true}
 )
-export default mongoose.model("Comentario",schemaComentario)
+const Comentario = mongoose.model("Comentario",comentarioSchema)
+export default Comentario

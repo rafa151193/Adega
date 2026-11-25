@@ -19,7 +19,7 @@ export async function buscarComentarioPorId(comentarioId){
     .populate('degustador')
 }
 
-export async function calcularMediaNotasPorBebida(bebidaId){
+/*export async function calcularMediaNotasPorBebida(bebidaId){
     const resultado = await Comentario.aggregate([
         {$match:{bebida:new mongoose.Types.ObjectId(bebidaId)}},
         {
@@ -31,7 +31,7 @@ export async function calcularMediaNotasPorBebida(bebidaId){
         },
     ])
     return resultado.length > 0 ? resultado[0]:{notaMedia:0,totalAvalicoes:0}
-}
+}*/
 export async function atualizarComentario(comentarioId,dadosAtualizados){
     return await Comentario.findByIdAndUpdate(comentarioId,dadosAtualizados,{
         new:true,

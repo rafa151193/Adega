@@ -1,32 +1,47 @@
+import mongoose from 'mongoose'
 import Bebida from '../models/Bebida.js'
+
+function validarObjectId(id){
+    if(!mongoose.isValidObjectId(id)){
+        throw new Error("ID bebida invalido.")
+    }
+}
 
 export async function criarBebida(dadosBebida){
     const novaBebida = new Bebida(dadosBebida)
-    return await novaBebida.save()
+    return novaBebida.save()
 }
 export async function  listarBebidas(filtros = {}){
-    return await Bebida.find(filtros).sort({createdAt:-1})
+    return  Bebida.find(filtros).sort({createdAt:-1})
 }
 export async function buscarBebidasPorID(bebidaId){
-    return await Bebida.findById(bebidaId)
+    validarObjectId(bebidaId)
+    return Bebida.findById(bebidaId)
 } 
 export async function listarBebidasComDesconto(){
-    return await Bebida.find({desconto:true}).sort({createdAt:-1})
+    return Bebida.find({
+        emDesconto:true,
+        percentulDesconto:{$gt:0},
+    }).sort({createdAt:-1})
 }
-export async function listarBebidasPorStatusBacklog(statusBacklog){
-    return await Bebida.find({backlog:statusBacklog}).sort({createdAt: -1})
+export async function listarBebidasPorStatusBacklog(notaMinima){
+    return Bebida.find({
+        categoriaBacklog:statusBacklog,
+    }).sort({createdAt:-1})
 }
-export async function listarBebidasPorNotaMinima(notaMinima){
-    return await Bebida.find({notaMedia:{$gte:notaminima}}).sort({
-        notaMedia:-1,
-    })
+export async function listaBebidasPorNotaMinima(notaMinima){
+    return Bebida.find({mediaNota:{$gte:notaMinima},
+    }).sort({mediaNota:-1})
 }
+
 export async function atualizarBebida(bebidaIs,dadosAtualizado){
-    return await Bebida.findByIdAndUpdate(bebidaIs,dadosAtualizado,{
+    validarObjectId(bebidaIs)
+    return Bebida.findByIdAndUpdate(bebidaId,dadosAtualizado,{
         new:true,
         runValidators:true
      })
 }
 export async function deletarBebida(bebidaId){
+    validarObjectId(bebidaId)
     return await Bebida.findByIdAndDelete(bebidaId)
 }

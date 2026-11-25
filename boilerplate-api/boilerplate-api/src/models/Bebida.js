@@ -61,7 +61,7 @@ const schemaBebida = new mongoose.Schema(
     {timestamps: true}
 )
 
-schemaBebida.virtual("precoFinal").get(function(){
+bebidaSchema.virtual("precoFinal").get(function(){
     if (!this.emDesconto || this.percentualDesconto <= 0){
         return this.preco
     }
@@ -69,10 +69,10 @@ schemaBebida.virtual("precoFinal").get(function(){
     return Number((this.preco - valorDesconto).toFixed(2))
 })
 
-schemaBebida.set("toJSON",{virtuals:true})
-schemaBebida.set("toObject",{virtuals:true})
+bebidaSchema.set("toJSON",{virtuals:true})
+bebidaSchema.set("toObject",{virtuals:true})
 
-const Bebida = mongoose.model("Bebida", schemaBebida);
+const Bebida = mongoose.model("Bebida", bebidaSchema);
 export default Bebida
 
 

@@ -18,7 +18,8 @@ const usuarioSchema = new mongoose.Schema(
     senha:{
         type:String,
         required:[true,"A senha do usuário é obrigatória."],
-        minlength:[6,"a senha deve tem pelo menos 6 caracteres."]
+        minlength:[6,"a senha deve tem pelo menos 6 caracteres."],
+        select:false,
 },
 perfil:{
     type:String,
@@ -33,14 +34,13 @@ ativo:{
 {timestamps:true
 }
 )
-usuarioSchema.pre("save",async function(proximo){
+usuarioSchema.pre("save",async function(){
     if (!this.isModified("senha")){
-        return proximo()
+        return 
     }
     const saltGerado = await bcryptjs.genSalt(10)
-    this.senha = await bcryptjs.hash(this.senha)
-    proximo()
-})
+    this.senha = await bcryptjs.hash(this.senha,saltGerado)
+    })
 usuarioSchema.methods.compararSenha = async function(senhaIformada){
     return bcryptjs.compare(senhaIformada,this.senha)
 }
@@ -51,4 +51,3 @@ usuarioSchema.methods.toJSON = function(){
 }
 const Usuario = mongoose.model("Usuario",usuarioSchema)
 export default Usuario
-
